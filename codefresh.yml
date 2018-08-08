@@ -1,0 +1,26 @@
+version: '1.0'
+
+steps:
+  build:
+    type: build
+    title: Building Docker Image
+    image_name: interaction/nginx
+  push_branch_tag:
+    title: Pushing Docker Image to Registry (branch tag)
+    candidate: '${{build}}'
+    tag: '${{CF_BRANCH_TAG_NORMALIZED}}'
+    type: push
+  push_commit_tag:
+    title: Pushing Docker Image to Registry (commit tag)
+    candidate: '${{build}}'
+    tag: '${{CF_REVISION}}'
+    type: push
+  push_latest_tag:
+    title: Pushing Docker Image to Registry (latest tag)
+    candidate: '${{build}}'
+    tag: latest
+    type: push
+    when:
+      branch:
+        only:
+          - master
